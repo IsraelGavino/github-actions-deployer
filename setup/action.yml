@@ -21,11 +21,14 @@ runs:
   using: 'docker'
   image: '../Dockerfile'
   args:
-    - ${{ inputs.SSH_HOST }}
-    - ${{ inputs.SSH_PORT }}
-    - ${{ inputs.SSH_USER }}
-    - ${{ inputs.SSH_KEY }}
-    - ${{ inputs.PATH_DEPLOY }}
+    - variable1: 'pepe'
+    - variable2: 'juan'
+    # - setup
+    # - ${{ inputs.SSH_HOST }}
+    # - ${{ inputs.SSH_PORT }}
+    # - ${{ inputs.SSH_USER }}
+    # - ${{ inputs.SSH_KEY }}
+    # - ${{ inputs.PATH_DEPLOY }}
 branding:
   icon: 'upload-cloud'
   color: 'blue'

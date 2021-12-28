@@ -1,0 +1,42 @@
+name: 'Deployer setup'
+description: 'Setup'
+inputs:
+  SSH_HOST:
+    description: 'Host SSH'
+    required: true
+  SSH_PORT:
+    description: 'Port SSH'
+    required: false
+    default: '22'
+  SSH_USER:
+    description: 'User SSH'
+    required: true
+  SSH_KEY:
+    description: 'Key SSH'
+    required: true
+  PATH_DEPLOY:
+    description: 'DEPLOY PATH'
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args:
+<<<<<<< HEAD
+    - setup
+    - ${{ inputs.SSH_HOST }}
+    - ${{ inputs.SSH_PORT }}
+    - ${{ inputs.SSH_USER }}
+    - ${{ inputs.SSH_KEY }}
+    - ${{ inputs.PATH_DEPLOY }}
+=======
+    - 'variable1=pepe variable2=juan'
+    # - setup
+    # - ${{ inputs.SSH_HOST }}
+    # - ${{ inputs.SSH_PORT }}
+    # - ${{ inputs.SSH_USER }}
+    # - ${{ inputs.SSH_KEY }}
+    # - ${{ inputs.PATH_DEPLOY }}
+>>>>>>> db5a5ba46f2dc1271a7374eb12f6f82f20e2e797
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'

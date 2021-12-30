@@ -25,7 +25,7 @@ runs:
     - ${{ inputs.SSH_HOST }}
     - ${{ inputs.SSH_PORT }}
     - ${{ inputs.SSH_USER }}
-    - "${{ inputs.SSH_KEY }}"
+    - ${{ inputs.SSH_KEY }}
     - ${{ inputs.PATH_DEPLOY }}
 branding:
   icon: 'upload-cloud'

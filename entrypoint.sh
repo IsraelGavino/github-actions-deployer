@@ -27,12 +27,6 @@ chown -R $USER:$GROUP ~/.ssh/
 # Obtenemos la IP del host
 HOST_IP=$(dig +short $SSH_HOST)
 
-cat ~/.ssh/known_hosts
-echo
-echo
-echo
-cat ~/.ssh/id_rsa
-
 # Añadimos a servidores conocidos
 ssh-keyscan -p $SSH_PORT -t rsa,dsa $HOST_IP >> ~/.ssh/known_hosts
 

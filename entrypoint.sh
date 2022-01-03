@@ -45,7 +45,7 @@ echo -e "\tIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
 
 
 # Ejecutamos
-ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
+#ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 
 ssh oscdenox "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 

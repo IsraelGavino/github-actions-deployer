@@ -38,7 +38,7 @@ ls -la /scripts
 ls -la ~/.ssh
 
 # Ejecutamos
-pepe = $(ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}")
+pepe='ssh -p'$SSH_PORT' -i ~/.ssh/id_rsa '$SSH_USER'@'$HOST_IP' "bash -s" -- < /scripts/'$FILE_SCRIPT'.sh '"${@:6}"')'
 echo $pepe
 
 # Salimos

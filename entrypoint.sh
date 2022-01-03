@@ -21,6 +21,7 @@ echo "$SSH_KEY" >> ~/.ssh/id_rsa
 # Permisos esenciales para SSH
 chmod 700 ~/.ssh/
 chmod 600 ~/.ssh/*
+chmod 400 ~/.ssh/id_rsa
 chmod u+w ~/.ssh/known_hosts
 chown -R $USER:$GROUP ~/.ssh/
 
@@ -37,7 +38,8 @@ ls -la /scripts
 ls -la ~/.ssh
 
 # Ejecutamos
-ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
+pepe = $(ssh -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}")
+echo $pepe
 
 # Salimos
 exit $?

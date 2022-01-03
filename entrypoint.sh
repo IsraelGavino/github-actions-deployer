@@ -41,7 +41,7 @@ echo -e "\tUser oscdenox" >> ~/.ssh/config
 echo -e "\tIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
 
 echo -en '\n\n' >> /etc/ssh/ssh_config
-echo "Include ${HOME}/.ssh/.config" >> /etc/ssh/ssh_config
+echo "Include ${HOME}/.ssh/config" >> /etc/ssh/ssh_config
 
 # lftp sftp://u99555015-6m4hDQd5:^6m4hDQd5%iD@access811083711.webspace-data.io -e "set sftp:auto-confirm yes; put ~/.ssh/id_rsa; bye"
 

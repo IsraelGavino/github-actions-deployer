@@ -45,7 +45,7 @@ echo "Include ${HOME}/.ssh/.config" >> /etc/ssh/ssh_config
 
 # lftp sftp://u99555015-6m4hDQd5:^6m4hDQd5%iD@access811083711.webspace-data.io -e "set sftp:auto-confirm yes; put ~/.ssh/id_rsa; bye"
 
-cat /etc/ssh/ssh_config
+ssh -v server
 
 # Ejecutamos
 ssh oscdenox "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"

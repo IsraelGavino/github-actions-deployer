@@ -24,7 +24,7 @@ runs:
   using: 'docker'
   image: '../Dockerfile'
   args:
-    - setup
+    - release
     - ${{ inputs.SSH_HOST }}
     - ${{ inputs.SSH_PORT }}
     - ${{ inputs.SSH_USER }}

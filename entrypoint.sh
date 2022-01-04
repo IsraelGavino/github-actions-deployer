@@ -24,8 +24,6 @@ chmod 600 ~/.ssh/*
 chmod u+w ~/.ssh/known_hosts
 chown -R $USER:$GROUP ~/.ssh/
 
-echo 'HashKnownHosts yes' >> /etc/ssh/ssh_config
-
 # Obtenemos la IP del host
 HOST_IP=$(dig +short $SSH_HOST)
 

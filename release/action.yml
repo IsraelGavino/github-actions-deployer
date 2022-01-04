@@ -14,6 +14,9 @@ inputs:
   SSH_KEY:
     description: 'Key SSH'
     required: true
+  PATH_DEPLOY:
+    description: 'Deploy path'
+    required: true
   RELEASE_NAME:
     description: 'Name release'
     required: true

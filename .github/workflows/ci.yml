@@ -7,6 +7,14 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
+      - name: delete release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: v0.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: release
         uses: actions/create-release@v1
         id: create_release

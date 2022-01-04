@@ -10,7 +10,7 @@ USER=$(id -u -n)
 GROUP=$(id -g -n)
 
 # Creamos directorios esenciales para SSH
-mkdir ~/.ssh
+mkdir -p ~/.ssh
 touch ~/.ssh/id_rsa
 touch ~/.ssh/known_hosts
 touch ~/.ssh/config

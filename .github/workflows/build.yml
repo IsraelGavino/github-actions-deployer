@@ -1,0 +1,27 @@
+name: tests
+
+on:
+  workflow_call:
+    inputs:
+      artifac-filename:
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: 📚 Empaquetamos
+        run: |
+          touch ${{inputs.artifac-filename}}
+          tar -czf ${{inputs.artifac-filename}} --exclude=${{inputs.artifac-filename}} .
+
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{inputs.artifac-filename}}
+          path: ${{inputs.artifac-filename}}

@@ -20,7 +20,7 @@ jobs:
           touch ${{inputs.artifac-filename}}
           tar -czf ${{inputs.artifac-filename}} --exclude=${{inputs.artifac-filename}} .
 
-      - name: Upload math result for job 1
+      - name: ☁️ Subiendo actifact
         uses: actions/upload-artifact@v2
         with:
           name: ${{inputs.artifac-filename}}

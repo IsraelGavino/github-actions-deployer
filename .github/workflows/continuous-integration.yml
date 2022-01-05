@@ -32,19 +32,19 @@ jobs:
       - name: ⚙️ Ejecutamos permissions
         run: make permissions
 
-      - name: 🐳 Levantamos httpd
-        run: make build-from-scratch CONTAINER=httpd
+      # - name: 🐳 Levantamos httpd
+      #   run: make build-from-scratch CONTAINER=httpd
 
-      - name: 🐳 Levantamos php
-        run: make build-from-scratch CONTAINER=php
+      # - name: 🐳 Levantamos php
+      #   run: make build-from-scratch CONTAINER=php
 
-      - name: 🐳 Levantamos mysql
-        run: make build-from-scratch CONTAINER=mysql
+      # - name: 🐳 Levantamos mysql
+      #   run: make build-from-scratch CONTAINER=mysql
 
-      - name: 🎻 Instalamos dependencias
-        run: |
-          export COMPOSE_INTERACTIVE_NO_CLI=1
-          make composer
+      # - name: 🎻 Instalamos dependencias
+      #   run: |
+      #     export COMPOSE_INTERACTIVE_NO_CLI=1
+      #     make composer
 
-      - name: ✅ Lanzamos tests
-        run: make unit-test
+      # - name: ✅ Lanzamos tests
+      #   run: make unit-test

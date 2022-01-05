@@ -1,4 +1,4 @@
-name: tests
+name: build
 
 on:
   workflow_call:
@@ -15,13 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: 📚 Empaquetamos
+      - name: 📚 Comprimimos
         run: |
-          touch ${{inputs.artifac-filename}}
-          tar -czf ${{inputs.artifac-filename}} --exclude=${{inputs.artifac-filename}} .
+          zip -r ${{inputs.artifac-filename}}.zip .
 
       - name: ☁️ Subiendo actifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{inputs.artifac-filename}}
-          path: ${{inputs.artifac-filename}}
+          name: ${{inputs.artifac-filename}}.zip
+          path: ${{inputs.artifac-filename}}.zip

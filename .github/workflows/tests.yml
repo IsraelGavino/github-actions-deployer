@@ -11,6 +11,14 @@ on:
         type: string
 
 jobs:
+  artifact-name:
+      runs-on: ubuntu-latest
+      outputs:
+        artifact-name: ${{ steps.artifact-name.outputs.value }}
+      steps:
+        - id: artifact-name
+          run: echo "::set-output name=value::$(echo ${GITHUB_SHA} | cut -c1-8)"
+
   tests:
     runs-on: ubuntu-latest
     defaults:

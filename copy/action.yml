@@ -1,1 +1,40 @@
-
+name: 'Deployer copy'
+description: 'Copy'
+inputs:
+  SSH_HOST:
+    description: 'Host SSH'
+    required: true
+  SSH_PORT:
+    description: 'Port SSH'
+    required: false
+    default: '22'
+  SSH_USER:
+    description: 'User SSH'
+    required: true
+  SSH_KEY:
+    description: 'Key SSH'
+    required: true
+  PATH_DEPLOY:
+    description: 'Deploy path'
+    required: true
+  DEPLOY_ARTIFAC:
+    description: 'Name file artifac'
+    required: true
+  REMOTE_PATH:
+    description: 'Path remote artifac'
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args:
+    - lock
+    - ${{ inputs.SSH_HOST }}
+    - ${{ inputs.SSH_PORT }}
+    - ${{ inputs.SSH_USER }}
+    - "${{ inputs.SSH_KEY }}"
+    - ${{ inputs.PATH_DEPLOY }}
+    - ${{ inputs.DEPLOY_ARTIFAC }}
+    - ${{ inputs.REMOTE_PATH }}
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'

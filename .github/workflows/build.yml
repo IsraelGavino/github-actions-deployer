@@ -14,6 +14,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: 🗑️ Eliminamos
+        run: |
+          rm -rf .docker
+          rm -rf .git
+          rm -rf .gitignore
+          rm -rf .editorconfig
       
       - name: 📚 Comprimimos
         run: |

@@ -58,4 +58,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          asset_paths: '["./${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip"]'
+          #asset_paths: '["./${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip"]'
+          asset_paths: '["./cache"]'

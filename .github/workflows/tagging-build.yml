@@ -3,7 +3,7 @@ name: build
 on:
   workflow_call:
     inputs:
-      artifac-filename:
+      delete-list-files:
         required: true
         type: string
 

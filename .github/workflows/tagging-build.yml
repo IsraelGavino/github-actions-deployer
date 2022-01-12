@@ -20,42 +20,38 @@ jobs:
           VERSION=$(grep -m1 version composer.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
           cat composer.json
           echo "::set-output name=value::$VERSION"
-          
-      - name: 🎻 SHOW
-        run: echo ${{steps.version-composer.outputs.value}}
 
-#       - name: 🗑️ Eliminamos
-#         run: |
-#           rm -rf .docker
-#           rm -rf .git
-#           rm -rf .gitignore
-#           rm -rf .editorconfig
+      - name: 🗑️ Eliminamos
+        run: |
+          rm -rf .docker
+          rm -rf .git
+          rm -rf .gitignore
+          rm -rf .editorconfig
 
-#       - name: 📚 Comprimimos
-#         run: |
-#           zip -r ${{inputs.artifac-filename}}.zip .
+      - name: 📚 Comprimimos
+        run: zip -r ${{steps.version-composer.outputs.value}}.zip .
 
-#       - name: 🗑️ Eliminar release
-#         uses: dev-drprasad/delete-tag-and-release@v0.2.0
-#         with:
-#           delete_release: true
-#           tag_name: ${{steps.version-composer.outputs.value}}-dev
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🗑️ Eliminar release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: ${{steps.version-composer.outputs.value}}-dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#       - name: 🚀 Crear release
-#         uses: actions/create-release@v1
-#         with:
-#           draft: false
-#           prerelease: true
-#           release_name: ${{steps.version-composer.outputs.value}}-dev
-#           tag_name: ${{steps.version-composer.outputs.value}}-dev
-#         env:
-#           GITHUB_TOKEN: ${{ github.token }}
+      - name: 🚀 Crear release
+        uses: actions/create-release@v1
+        with:
+          draft: false
+          prerelease: true
+          release_name: ${{steps.version-composer.outputs.value}}-dev
+          tag_name: ${{steps.version-composer.outputs.value}}-dev
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
-#       - name: ☁️ Subiendo release
-#         uses: alexellis/upload-assets@0.2.2
-#         env:
-#           GITHUB_TOKEN: ${{ github.token }}
-#         with:
-#           asset_paths: '["${{inputs.artifac-filename}}.zip"]'
+      - name: ☁️ Subiendo release
+        uses: alexellis/upload-assets@0.2.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          asset_paths: '["${{steps.version-composer.outputs.value}}.zip"]'

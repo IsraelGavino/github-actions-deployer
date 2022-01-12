@@ -26,11 +26,7 @@ jobs:
           echo "::set-output name=value::$VERSION"
 
       - name: 🗑️ Eliminamos residuos
-        run: |
-          rm -rf .docker
-          rm -rf .git
-          rm -rf .gitignore
-          rm -rf .editorconfig
+        run: for f in ${{inputs.delete-list-files}}; do rm -rf $f; done
 
       - name: 📚 Comprimimos
         run: zip -r ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip .

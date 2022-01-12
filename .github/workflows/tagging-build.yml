@@ -7,6 +7,9 @@ on:
         type: string
       suffixe:
         type: string
+      prerelease:
+        type: boolean
+        required: true
 
 jobs:
   tagger-build:
@@ -44,7 +47,7 @@ jobs:
         uses: actions/create-release@v1
         with:
           draft: false
-          prerelease: true
+          prerelease: ${{inputs.prerelease}}
           release_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
           tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
         env:

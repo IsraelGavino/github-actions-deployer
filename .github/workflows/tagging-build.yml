@@ -4,7 +4,8 @@ on:
   workflow_call:
     inputs:
       delete-list-files:
-        required: true
+        type: string
+      suffixe:
         type: string
 
 jobs:
@@ -21,7 +22,7 @@ jobs:
           cat composer.json
           echo "::set-output name=value::$VERSION"
 
-      - name: 🗑️ Eliminamos
+      - name: 🗑️ Eliminamos residuos
         run: |
           rm -rf .docker
           rm -rf .git
@@ -29,13 +30,13 @@ jobs:
           rm -rf .editorconfig
 
       - name: 📚 Comprimimos
-        run: zip -r ${{steps.version-composer.outputs.value}}.zip .
+        run: zip -r ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip .
 
       - name: 🗑️ Eliminar release
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
-          tag_name: ${{steps.version-composer.outputs.value}}-dev
+          tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -44,8 +45,8 @@ jobs:
         with:
           draft: false
           prerelease: true
-          release_name: ${{steps.version-composer.outputs.value}}-dev
-          tag_name: ${{steps.version-composer.outputs.value}}-dev
+          release_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
+          tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -54,4 +55,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          asset_paths: '["${{steps.version-composer.outputs.value}}.zip"]'
+          asset_paths: '["./${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip"]'

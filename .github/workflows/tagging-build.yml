@@ -5,8 +5,10 @@ on:
     inputs:
       delete-list-files:
         type: string
+        default: ""
       suffixe:
         type: string
+        default: ""
       prerelease:
         type: boolean
         required: true

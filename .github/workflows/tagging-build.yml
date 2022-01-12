@@ -57,4 +57,5 @@ jobs:
         uses: AButler/upload-release-assets@v2.0
         with:
           files: '${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip'
+          release-tag: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
           repo-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,62 @@
+name: 'Github actions deployer'
+description: 'Deployment Environment, inspiration deployer php'
+inputs:
+  SSH_HOST:
+    description: 'Host SSH'
+    required: true
+  SSH_PORT:
+    description: 'Port SSH'
+    required: false
+    default: '22'
+  SSH_USER:
+    description: 'User SSH'
+    required: true
+  SSH_KEY:
+    description: 'Key SSH'
+    required: true
+  KEEP_RELEASES:
+    description: 'Number of releases stored'
+    required: false
+    default: 5
+  PATH_PUBLIC:
+    description: 'Path deployment'
+    required: true
+  DIRS_SHARE:
+    description: 'List of dirs what will be shared between releases'
+    required: false
+    default: ''
+  FILES_SHARE:
+    description: 'List of files what will be shared between releases'
+    required: false
+    default: ''
+  USERNAME:
+    description: 'User performing the deployment'
+    required: true
+  GITHUB_TOKEN:
+    description: 'Token Github'
+    required: true
+  GITHUB_REPOSITORY:
+    description: 'Repository Github'
+    required: true
+  BRANCH_NAME:
+    description: 'Branch name deployment'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.SSH_HOST }}
+    - ${{ inputs.SSH_PORT }}
+    - ${{ inputs.SSH_USER }}
+    - ${{ inputs.SSH_KEY }}
+    - ${{ inputs.KEEP_RELEASES }}
+    - ${{ inputs.PATH_PUBLIC }}
+    - ${{ inputs.DIRS_SHARE }}
+    - ${{ inputs.FILES_SHARE }}
+    - ${{ inputs.USERNAME }}
+    - ${{ inputs.GITHUB_TOKEN }}
+    - ${{ inputs.GITHUB_REPOSITORY }}
+    - ${{ inputs.BRANCH_NAME }}
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'

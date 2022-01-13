@@ -48,7 +48,7 @@ runs:
     - ${{ inputs.SSH_HOST }}
     - ${{ inputs.SSH_PORT }}
     - ${{ inputs.SSH_USER }}
-    - ${{ inputs.SSH_KEY }}
+    - "${{ inputs.SSH_KEY }}"
     - ${{ inputs.KEEP_RELEASES }}
     - ${{ inputs.PATH_PUBLIC }}
     - ${{ inputs.DIRS_SHARE }}

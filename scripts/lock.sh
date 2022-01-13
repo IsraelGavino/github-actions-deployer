@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Variables
+# Variables
 PATH_DEPLOY="${1}/deploy"
 USERNAME="${2}"
 

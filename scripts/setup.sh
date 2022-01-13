@@ -3,6 +3,7 @@
 # Variables
 PATH_PUBLIC="${1}"
 PATH_DEPLOY="${1}/deploy"
+PATH_RELEASE="${2}"
 
 # Directorio deploy
 if [ ! -d $PATH_DEPLOY ]; then 
@@ -18,6 +19,12 @@ fi
 # Si existe el directorio current y no es un enlace simbolico, marcamos como error
 if [ ! -L $PATH_DEPLOY/current ] && [ -d $PATH_DEPLOY/current ]; then
 	echo "Error: Existe un directorio llamado current en $PATH_DEPLOY/current eliminalo"
+	exit 1
+fi
+
+# Si existe el directorio release
+if [ -d $PATH_RELEASE ]; then
+	echo "Error: Existe un directorio llamado $PATH_RELEASE ¿Lanzando el mismo release?"
 	exit 1
 fi
 

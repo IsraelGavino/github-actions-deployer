@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-run() {
-	local cmd="${1}"
-	/bin/sh -c "LANG=C LC_ALL=C ${cmd}"
-}
-
 ssh_config() {
 	local SSH_KEY="${1}"
 	local USER="${2}"
@@ -14,22 +9,22 @@ ssh_config() {
 	local SSH_HOST_IP="${6}"
 
 	# Creamos directorios esenciales para SSH
-	run "mkdir -p ~/.ssh"
-	run "touch ~/.ssh/id_rsa"
-	run "touch ~/.ssh/known_hosts"
-	run "touch ~/.ssh/config"
+	mkdir -p ~/.ssh
+	touch ~/.ssh/id_rsa
+	touch ~/.ssh/known_hosts
+	touch ~/.ssh/config
 
 	# Contenido de id_rsa
-	run "echo \"${SSH_KEY}\" >> ~/.ssh/id_rsa"
+	echo "${SSH_KEY}" >> ~/.ssh/id_rsa
 
 	# Permisos esenciales para SSH
-	run "chmod 700 ~/.ssh/"
-	run "chmod 600 ~/.ssh/*"
-	run "chmod u+w ~/.ssh/known_hosts"
-	run "chown -R ${USER}:${GROUP} ~/.ssh/"
+	chmod 700 ~/.ssh/
+	chmod 600 ~/.ssh/*
+	chmod u+w ~/.ssh/known_hosts
+	chown -R ${USER}:${GROUP} ~/.ssh/
 
 	# Añadimos a servidores conocidos
-	run "ssh-keyscan -p ${SSH_PORT} -t rsa,dsa ${SSH_HOST_IP} >> ~/.ssh/known_hosts"
+	ssh-keyscan -p ${SSH_PORT} -t rsa,dsa ${SSH_HOST_IP} >> ~/.ssh/known_hosts
 }
 
 ssh_execute_remote() {
@@ -42,16 +37,54 @@ ssh_execute_remote() {
 	ssh -o GlobalKnownHostsFile=~/.ssh/known_hosts -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 }
 
+scp_upload_file() {
+	local SSH_HOST="${1}"
+	local SSH_PORT="${2}"
+	local SSH_USER="${3}"
+	local SSH_HOST_IP="${4}"
+	local FILE_UPLOAD="${5}"
+	local PATH_REMOTE="${6}"
+
+	scp -o GlobalKnownHostsFile=~/.ssh/known_hosts -P$SSH_PORT -i ~/.ssh/id_rsa $FILE_UPLOAD $SSH_USER@$SSH_HOST_IP:$PATH_REMOTE
+}
+
 function api_github() {
 	local GITHUB_TOKEN="${1}"
 
-	curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.json" -s https://api.github.com/${@:2}
+	curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" -s https://api.github.com/${@:2}
 }
 
-function api_github_release_url() {
+function api_github_composer_version() {
+	local GITHUB_TOKEN="${1}"
+	local GITHUB_REPOSITORY="${2}"
+	local BRANCH_NAME="${3}"	
+
+	VERSION=`api_github $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/contents/composer.json?ref=$BRANCH_NAME | jq -r ".version"`
+
+	if [ "$BRANCH_NAME" = "develop" ]; then
+		VERSION=$VERSION-dev
+	fi;
+
+	echo $VERSION
+}
+
+function api_github_download_release() {
 	local GITHUB_TOKEN="${1}"
 	local GITHUB_REPOSITORY="${2}"
 	local BRANCH_NAME="${3}"
+	local COMPOSER_VERSION="${4}"
 
-	#COMPOSER_VERSION=`api_github $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/contents/composer.json?ref=$BRANCH_NAME | jq -r ".version"`
+	if [ "$BRANCH_NAME" = "develop" ]; then
+		PRERELEASE=true
+	else
+		PRERELEASE=false
+	fi;
+
+	RELEASE_URL=`api_github $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/releases | jq -r ".[] | select(.prerelease == $PRERELEASE) | .assets[] | select(.name | contains(\"$COMPOSER_VERSION\")) | .url"`
+	
+	RELEASE_NAME=$(curl -sIkL -H "Authorization: token $GITHUB_TOKEN" -H 'Accept: application/octet-stream' "$RELEASE_URL" | sed -r '/filename=/!d;s/.*filename=(.*)$/\1/' | tr -d '[:space:]')
+
+	curl -LJO# -s -H "Authorization: token $GITHUB_TOKEN" -H 'Accept: application/octet-stream' "$RELEASE_URL"
+
+	echo $RELEASE_NAME
 }

@@ -30,7 +30,7 @@ jobs:
       - name: 🗑️ Eliminamos residuos
         run: for f in ${{inputs.delete-list-files}}; do rm -rf $f; done
 
-      - name: 🗑️ Permisos
+      - name: 🔑 Permisos
         run: cd .docker && make permissions && cd ..
 
       - name: 📚 Comprimimos

@@ -23,7 +23,7 @@ jobs:
       - name: 🗳️ Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{input.branch_name}}
+          ref: ${{inputs.branch_name}}
 
       - name: 🎻 Obtener version de composer
         id: version-composer

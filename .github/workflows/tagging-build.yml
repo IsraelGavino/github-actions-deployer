@@ -9,6 +9,8 @@ on:
       suffixe:
         type: string
         default: ""
+      prerelease:
+        type: boolean
 
 jobs:
   tagger-build:

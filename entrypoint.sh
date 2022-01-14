@@ -20,7 +20,7 @@ GROUP=$(id -g -n)
 SSH_HOST_IP=$(dig +short ${SSH_HOST})
 
 # Librerias
-. "scripts/base.sh"
+. "/scripts/base.sh"
 
 echo "🕸️ Configuramos SSH"
 ssh_config "$SSH_KEY" $USER $GROUP $SSH_HOST $SSH_PORT $SSH_HOST_IP

@@ -11,6 +11,10 @@ on:
         default: ""
       prerelease:
         type: boolean
+        default: false
+      branch_name:
+        type: string
+        required: true
 
 jobs:
   tagger-build:
@@ -19,7 +23,7 @@ jobs:
       - name: 🗳️ Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{github.event.pull_request.head.sha}}
+          ref: ${{input.branch_name}}
 
       - name: 🎻 Obtener version de composer
         id: version-composer

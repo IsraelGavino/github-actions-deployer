@@ -9,9 +9,6 @@ on:
       suffixe:
         type: string
         default: ""
-      branch_name:
-        type: string
-        required: true
 
 jobs:
   tagger-build:
@@ -20,7 +17,7 @@ jobs:
       - name: 🗳️ Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{inputs.branch_name}}
+          ref: ${{github.event.pull_request.head.sha}}
 
       - name: 🎻 Obtener version de composer
         id: version-composer

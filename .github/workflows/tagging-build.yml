@@ -9,8 +9,8 @@ on:
       suffixe:
         type: string
         default: ""
-      prerelease:
-        type: boolean
+      branch_name:
+        type: string
         required: true
 
 jobs:
@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: 🗳️ Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{inputs.branch_name}}
 
       - name: 🎻 Obtener version de composer
         id: version-composer

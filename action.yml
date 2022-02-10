@@ -95,7 +95,7 @@ runs:
     - ${{ inputs.BRANCH_NAME }}
     - ${{ inputs.CPANEL_URL }}
     - ${{ inputs.CPANEL_USER }}
-    - ${{ inputs.CPANEL_KEY }}
+    - "${{ inputs.CPANEL_KEY }}"
     - ${{ inputs.DATABASE_HOST }}
     - ${{ inputs.DATABASE_NAME }}
     - ${{ inputs.DATABASE_USER }}

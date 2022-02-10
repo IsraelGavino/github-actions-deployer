@@ -11,41 +11,54 @@ DATABASE_PASSWORD="${7}"
 PATH_PUBLIC="${8}"
 DEPLOY_DOMAIN="${9}"
 DEPLOY_SUBDOMAIN="${10}"
-DEPlOY_URL=${DEPLOY_SUBDOMAIN}.${DEPLOY_DOMAIN}
+DEPLOY_URL=${DEPLOY_SUBDOMAIN}.${DEPLOY_DOMAIN}
 
-# Eliminamos
-rm -rf $PATH_PUBLIC/public_html
-rm -rf $PATH_PUBLIC/deploy
+echo $CPANEL_URL
+echo $CPANEL_USER
+echo $CPANEL_SECRET
+echo $DATABASE_HOST
+echo $DATABASE_NAME
+echo $DATABASE_USER
+echo $DATABASE_PASSWORD
+echo $PATH_PUBLIC
+echo $DEPLOY_DOMAIN
+echo $DEPLOY_SUBDOMAIN
+echo $DEPLOY_URL
 
-# Existe el subdominio
-theDomainExiste=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/DomainInfo/single_domain_data?domain='${DEPlOY_URL}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
 
-# Existe la base de datos
-theDatabaseExists=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/check_database?name='${DATABASE_NAME}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
+# # Eliminamos
+# rm -rf $PATH_PUBLIC/public_html
+# rm -rf $PATH_PUBLIC/deploy
 
-# Si no existe el subdominio
-if [ "$theDomainExiste" = 0 ]; then
-	# Obtenemos subdominio y dominio
-	IFS='.' read -r subdomain domain <<< "$DEPlOY_URL"
+# # Existe el subdominio
+# theDomainExiste=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/DomainInfo/single_domain_data?domain='${DEPLOY_URL}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
 
-	# Creamos subdominio
-	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SubDomain/addsubdomain?domain='${DEPLOY_SUBDOMAIN}'&rootdomain='${DEPLOY_DOMAIN}'&dir='${PATH_PUBLIC}'/public_html&disallowdot=1'
+# # Existe la base de datos
+# theDatabaseExists=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/check_database?name='${DATABASE_NAME}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
 
-	# AutoSSL
-	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SSL/start_autossl_check'
+# # Si no existe el subdominio
+# if [ "$theDomainExiste" = 0 ]; then
+# 	# Obtenemos subdominio y dominio
+# 	IFS='.' read -r subdomain domain <<< "$DEPLOY_URL"
 
-	# Eliminamos el directorio que crea
-	rm -rf ${PATH_PUBLIC}/public_html
-fi
+# 	# Creamos subdominio
+# 	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SubDomain/addsubdomain?domain='${DEPLOY_SUBDOMAIN}'&rootdomain='${DEPLOY_DOMAIN}'&dir='${PATH_PUBLIC}'/public_html&disallowdot=1'
 
-# Si existe la base de datos
-if [ "$theDatabaseExists" = 1 ]; then
-	# Eliminamos database
-	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/delete_database?name='${DATABASE_NAME}''
-fi
+# 	# AutoSSL
+# 	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SSL/start_autossl_check'
 
-# Crear database
-curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/create_database?name='${DATABASE_NAME}''
+# 	# Eliminamos el directorio que crea
+# 	rm -rf ${PATH_PUBLIC}/public_html
+# fi
 
-# Permisos
-curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/set_privileges_on_database?user='${DATABASE_USER}'&database='${DATABASE_NAME}'&privileges=ALL'
+# # Si existe la base de datos
+# if [ "$theDatabaseExists" = 1 ]; then
+# 	# Eliminamos database
+# 	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/delete_database?name='${DATABASE_NAME}''
+# fi
+
+# # Crear database
+# curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/create_database?name='${DATABASE_NAME}''
+
+# # Permisos
+# curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/set_privileges_on_database?user='${DATABASE_USER}'&database='${DATABASE_NAME}'&privileges=ALL'

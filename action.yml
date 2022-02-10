@@ -62,6 +62,14 @@ inputs:
     description: 'Database password'
     required: false
     default: ''
+  DEPLOY_DOMAIN:
+    description: 'Deploy domain'
+    required: false
+    default: ''
+  DEPLOY_SUBDOMAIN:
+    description: 'Deploy subdomain'
+    required: false
+    default: ''
   USERNAME:
     description: 'User performing the deployment'
     required: true

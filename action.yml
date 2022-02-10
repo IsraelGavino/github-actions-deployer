@@ -1,6 +1,10 @@
 name: 'Github actions deployer'
 description: 'Deployment Environment, inspiration deployer php'
 inputs:
+  CLEAN_UP:
+    type: boolean
+    required: false
+    default: false
   SSH_HOST:
     description: 'Host SSH'
     required: true
@@ -29,6 +33,35 @@ inputs:
     description: 'List of files what will be shared between releases'
     required: false
     default: ''
+  BRANCH_NAME:
+    description: 'Branch name deployment'
+    required: true
+  CPANEL_URL:
+    description: 'Cpanel URL'
+    required: false
+    default: ''
+  CPANEL_USER:
+    description: 'Cpanel User'
+    required: false
+    default: ''
+  CPANEL_KEY:
+    description: 'Cpanel token key'
+    required: false
+    default: ''
+  DATABASE_HOST:
+    description: 'Database host'
+    required: false
+    default: ''
+  DATABASE_NAME:
+    description: 'Database name'
+    required: false
+  DATABASE_USER:
+    description: 'Database user'
+    required: false
+  DATABASE_PASSWORD:
+    description: 'Database password'
+    required: false
+    default: ''
   USERNAME:
     description: 'User performing the deployment'
     required: true
@@ -38,13 +71,11 @@ inputs:
   GITHUB_REPOSITORY:
     description: 'Repository Github'
     required: true
-  BRANCH_NAME:
-    description: 'Branch name deployment'
-    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - ${{ inputs.CLEAN_UP }}
     - ${{ inputs.SSH_HOST }}
     - ${{ inputs.SSH_PORT }}
     - ${{ inputs.SSH_USER }}
@@ -53,10 +84,17 @@ runs:
     - ${{ inputs.PATH_PUBLIC }}
     - ${{ inputs.DIRS_SHARE }}
     - ${{ inputs.FILES_SHARE }}
+    - ${{ inputs.BRANCH_NAME }}
+    - ${{ inputs.CPANEL_URL }}
+    - ${{ inputs.CPANEL_USER }}
+    - ${{ inputs.CPANEL_KEY }}
+    - ${{ inputs.DATABASE_HOST }}
+    - ${{ inputs.DATABASE_NAME }}
+    - ${{ inputs.DATABASE_USER }}
+    - ${{ inputs.DATABASE_PASSWORD }}
     - ${{ inputs.USERNAME }}
     - ${{ inputs.GITHUB_TOKEN }}
-    - ${{ inputs.GITHUB_REPOSITORY }}
-    - ${{ inputs.BRANCH_NAME }}
+    - ${{ inputs.GITHUB_REPOSITORY }}    
 branding:
   icon: 'upload-cloud'
   color: 'blue'

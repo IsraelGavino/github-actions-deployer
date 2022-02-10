@@ -7,10 +7,7 @@ CLEAN_UP="${1}"
 SSH_HOST="${2}"
 SSH_PORT="${3}"
 SSH_USER="${4}"
-SSH_
-
-
-="${5}"
+SSH_KEY="${5}"
 KEEP_RELEASES="${6}"
 PATH_PUBLIC="${7}"
 DIRS_SHARE="${8}"

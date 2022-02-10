@@ -14,7 +14,8 @@ DEPLOY_SUBDOMAIN="${10}"
 DEPlOY_URL=${DEPLOY_SUBDOMAIN}.${DEPLOY_DOMAIN}
 
 # Eliminamos
-rm -rf $PATH_PUBLIC/*
+rm -rf $PATH_PUBLIC/public_html
+rm -rf $PATH_PUBLIC/deploy
 
 # Existe el subdominio
 theDomainExiste=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/DomainInfo/single_domain_data?domain='${DEPlOY_URL}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)

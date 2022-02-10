@@ -100,6 +100,8 @@ runs:
     - ${{ inputs.DATABASE_NAME }}
     - ${{ inputs.DATABASE_USER }}
     - ${{ inputs.DATABASE_PASSWORD }}
+    - ${{ inputs.DEPLOY_DOMAIN }}
+    - ${{ inputs.DEPLOY_SUBDOMAIN }}    
     - ${{ inputs.USERNAME }}
     - ${{ inputs.GITHUB_TOKEN }}
     - ${{ inputs.GITHUB_REPOSITORY }}    

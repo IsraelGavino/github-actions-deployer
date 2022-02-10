@@ -32,15 +32,14 @@ SSH_HOST_IP=$(dig +short ${SSH_HOST})
 # Librerias
 . "/scripts/base.sh"
 
+echo "🕸️ Configuramos SSH"
+ssh_config "$SSH_KEY" $USER $GROUP $SSH_HOST $SSH_PORT $SSH_HOST_IP
+
 # Limpiar
 if [ "$CLEAN_UP" = "true" ]; then
   echo "🗑️ Ejecutamos delete"
   ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "delete" $CPANEL_URL $CPANEL_USER $CPANEL_SECRET $DATABASE_HOST $DATABASE_NAME $DATABASE_USER $DATABASE_PASSWORD $PATH_PUBLIC $DEPLOY_DOMAIN $DEPLOY_SUBDOMAIN
 fi
-
-
-# echo "🕸️ Configuramos SSH"
-# ssh_config "$SSH_KEY" $USER $GROUP $SSH_HOST $SSH_PORT $SSH_HOST_IP
 
 # echo "🎻 Obtenemos version composer"
 # VERSION=`api_github_composer_version $GITHUB_TOKEN $GITHUB_REPOSITORY $BRANCH_NAME`

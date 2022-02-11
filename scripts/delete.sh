@@ -13,42 +13,39 @@ DEPLOY_DOMAIN="${9}"
 DEPLOY_SUBDOMAIN="${10}"
 DEPLOY_URL=${DEPLOY_SUBDOMAIN}.${DEPLOY_DOMAIN}
 
-echo "password: $DATABASE_PASSWORD"
+# Eliminamos
+rm -rf $PATH_PUBLIC/public_html
+rm -rf $PATH_PUBLIC/deploy
 
+# Existe el subdominio
+theDomainExiste=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/DomainInfo/single_domain_data?domain='${DEPLOY_URL}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
 
-# # Eliminamos
-# rm -rf $PATH_PUBLIC/public_html
-# rm -rf $PATH_PUBLIC/deploy
+# Existe la base de datos
+theDatabaseExists=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/check_database?name='${DATABASE_NAME}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
 
-# # Existe el subdominio
-# theDomainExiste=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/DomainInfo/single_domain_data?domain='${DEPLOY_URL}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
+# Si no existe el subdominio
+if [ "$theDomainExiste" = 0 ]; then
+	# Obtenemos subdominio y dominio
+	IFS='.' read -r subdomain domain <<< "$DEPLOY_URL"
 
-# # Existe la base de datos
-# theDatabaseExists=$(curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/check_database?name='${DATABASE_NAME}'' | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["'status'"]';)
+	# Creamos subdominio
+	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SubDomain/addsubdomain?domain='${DEPLOY_SUBDOMAIN}'&rootdomain='${DEPLOY_DOMAIN}'&dir='${PATH_PUBLIC}'/public_html&disallowdot=1'
 
-# # Si no existe el subdominio
-# if [ "$theDomainExiste" = 0 ]; then
-# 	# Obtenemos subdominio y dominio
-# 	IFS='.' read -r subdomain domain <<< "$DEPLOY_URL"
+	# AutoSSL
+	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SSL/start_autossl_check'
 
-# 	# Creamos subdominio
-# 	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SubDomain/addsubdomain?domain='${DEPLOY_SUBDOMAIN}'&rootdomain='${DEPLOY_DOMAIN}'&dir='${PATH_PUBLIC}'/public_html&disallowdot=1'
+	# Eliminamos el directorio que crea
+	rm -rf ${PATH_PUBLIC}/public_html
+fi
 
-# 	# AutoSSL
-# 	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/SSL/start_autossl_check'
+# Si existe la base de datos
+if [ "$theDatabaseExists" = 1 ]; then
+	# Eliminamos database
+	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/delete_database?name='${DATABASE_NAME}''
+fi
 
-# 	# Eliminamos el directorio que crea
-# 	rm -rf ${PATH_PUBLIC}/public_html
-# fi
+# Crear database
+curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/create_database?name='${DATABASE_NAME}''
 
-# # Si existe la base de datos
-# if [ "$theDatabaseExists" = 1 ]; then
-# 	# Eliminamos database
-# 	curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/delete_database?name='${DATABASE_NAME}''
-# fi
-
-# # Crear database
-# curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/create_database?name='${DATABASE_NAME}''
-
-# # Permisos
-# curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/set_privileges_on_database?user='${DATABASE_USER}'&database='${DATABASE_NAME}'&privileges=ALL'
+# Permisos
+curl -s -H'Authorization: cpanel '${CPANEL_USER}':'${CPANEL_SECRET}'' ''${CPANEL_URL}'/execute/Mysql/set_privileges_on_database?user='${DATABASE_USER}'&database='${DATABASE_NAME}'&privileges=ALL'

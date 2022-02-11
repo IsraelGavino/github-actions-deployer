@@ -33,10 +33,8 @@ ssh_execute_remote() {
 	local SSH_USER="${3}"
 	local SSH_HOST_IP="${4}"
 	local FILE_SCRIPT="${5}"
-	
-	echo "${@:6}"
 
-	#ssh -o GlobalKnownHostsFile=~/.ssh/known_hosts -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
+	ssh -o GlobalKnownHostsFile=~/.ssh/known_hosts -p$SSH_PORT -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST_IP "bash -s" -- < /scripts/$FILE_SCRIPT.sh "${@:6}"
 }
 
 scp_upload_file() {

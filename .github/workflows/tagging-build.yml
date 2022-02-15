@@ -15,9 +15,6 @@ on:
       branch_name:
         type: string
         required: true
-      github_token:
-        type: string
-        required: true
       github_repository:
         type: string
         required: true

@@ -6,16 +6,10 @@ on:
       project-name:
         required: true
         type: string
-      working-directory:
-        required: true
-        type: string
 
 jobs:
   tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{inputs.working-directory}}
 
     steps:
       - uses: actions/checkout@v2

@@ -8,4 +8,4 @@ cd $PATH_RELEASE
 
 # Lanzamos composer
 composer update --no-dev
-#composer run-script installs
+composer run-script installs

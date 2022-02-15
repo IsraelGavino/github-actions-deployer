@@ -10,7 +10,7 @@
 
 
 <p align="center">
-  Herramienta de <strong>despliegue escrita en bash preparada con Docker para funcionar en cualquier lugar.</strong>
+  Herramienta de <strong>despliegue</strong> escrita en bash preparada con Docker para funcionar en cualquier lugar.
   <br />
   <br />
   Basado en: https://github.com/deployphp/deployer</p>
@@ -22,20 +22,20 @@
 
 1. Instalar Docker
 2. Clonar el proyecto: `git clone https://github.com/denoxES/github-actions-deployer.git`
-3. Move to the project folder: `cd php-ddd-example`
+3. Moverse al directorio: `cd github-actions-deployer`
 
 
 ## 👩‍💻 Explicación del proyecto
 
 Se necesita tener clave privada para la conexión SSH. Una vez configurada en el servidor y host podrás lanzar el despliegue desde cualquier lugar.
 
-### 🔥 Como ejecutar
+## 🔥 Como ejecutar
 
-## 🔑 Obtener llave
+### 🔑 Obtener llave
 
 `KEY_PASS="$(cat ~/.ssh/id_rsa)"`
 
-## 🐳 Docker
+### 🐳 Docker
 
 `docker build --no-cache --progress=plain -t github-actions-deployer . && docker run --rm github-actions-deployer:latest \
 CLEAN_UP \
@@ -61,7 +61,34 @@ USERNAME \
 GITHUB_TOKEN \
 GITHUB_REPOSITORY`
 
-## 👩‍💻 Parametros
+### 🐳 Ejemplo
+
+`docker build --no-cache --progress=plain -t github-actions-deployer . && docker run --rm github-actions-deployer:latest \
+false \
+dominio.com \
+22 \
+denox \
+"$KEY_PASS" \
+5 \
+/home/denox/public_html/sampedro/github-trash \
+"images temp feeds cache" \
+"sitemap.xml includes/configure.php" \
+develop \
+https://dominio.com:2083 \
+denox \
+534SFRDT3465EFSER12313 \
+localhost \
+denox_github_trash \
+denox_denox \
+"#jttm38245" \
+denox.com \
+trash \
+jose-sampedro \
+ghp_XASD3245rf34534651223 \
+denoxES/denox-denox`
+
+### 👩‍💻 Parametros
+
 * CLEAN_UP:
     * type: boolean
     * required: false

@@ -48,10 +48,16 @@ scp_upload_file() {
 	scp -o GlobalKnownHostsFile=~/.ssh/known_hosts -P$SSH_PORT -i ~/.ssh/id_rsa $FILE_UPLOAD $SSH_USER@$SSH_HOST_IP:$PATH_REMOTE
 }
 
-function api_github() {
+function api_github_raw() {
 	local GITHUB_TOKEN="${1}"
 
 	curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" -s https://api.github.com/${@:2}
+}
+
+function api_github_object() {
+	local GITHUB_TOKEN="${1}"
+
+	curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" -s https://api.github.com/${@:2}
 }
 
 function api_github_composer_version() {
@@ -59,13 +65,28 @@ function api_github_composer_version() {
 	local GITHUB_REPOSITORY="${2}"
 	local BRANCH_NAME="${3}"	
 
-	VERSION=`api_github $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/contents/composer.json?ref=$BRANCH_NAME | jq -r ".version"`
+	VERSION=`api_github_raw $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/contents/composer.json?ref=$BRANCH_NAME | jq -r ".version"`
 
 	if [ "$BRANCH_NAME" = "develop" ]; then
 		VERSION=$VERSION-dev
 	fi;
 
 	echo $VERSION
+}
+
+function api_github_download_file() {
+	local GITHUB_TOKEN="${1}"
+	local GITHUB_REPOSITORY="${2}"
+	local BRANCH_NAME="${3}"	
+	local FILENAME="${4}"
+	local DIRNAME="$(dirname $FILENAME)"
+	local BASENAME="$(basename -- $FILENAME)"
+
+	FILE_SHA=`api_github_object $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/contents/$DIRNAME?ref=$BRANCH_NAME | jq -r ".[] | select(.name == \"${BASENAME}\") | .sha"`
+
+	api_github_raw $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/git/blobs/$FILE_SHA?ref=$BRANCH_NAME > $BASENAME
+
+	echo $BASENAME
 }
 
 function api_github_download_release() {
@@ -80,7 +101,7 @@ function api_github_download_release() {
 		PRERELEASE=false
 	fi;
 
-	RELEASE_URL=`api_github $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/releases | jq -r ".[] | select(.prerelease == $PRERELEASE) | .assets[] | select(.name | contains(\"$COMPOSER_VERSION\")) | .url"`
+	RELEASE_URL=`api_github_raw $GITHUB_TOKEN repos/$GITHUB_REPOSITORY/releases | jq -r ".[] | select(.prerelease == $PRERELEASE) | .assets[] | select(.name | contains(\"$COMPOSER_VERSION\")) | .url"`
 	
 	RELEASE_NAME=$(curl -sIkL -H "Authorization: token $GITHUB_TOKEN" -H 'Accept: application/octet-stream' "$RELEASE_URL" | sed -r '/filename=/!d;s/.*filename=(.*)$/\1/' | tr -d '[:space:]')
 

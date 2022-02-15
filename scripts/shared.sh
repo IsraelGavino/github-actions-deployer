@@ -45,7 +45,7 @@ do
     mkdir -p $dirname
 
     # Creamos el symlink
-    ln -s $PATH_SHARED/$directory $PATH_RELEASE/$directory
+    ln -sfn $PATH_SHARED/$directory $PATH_RELEASE/$directory
 done
 
 # Recorremos
@@ -71,5 +71,5 @@ do
     mkdir -p $PATH_SHARED/$directory
 
     # Creamos el symlink
-    ln -s $PATH_SHARED/$file $PATH_RELEASE/$file
+    ln -sfn $PATH_SHARED/$file $PATH_RELEASE/$file
 done

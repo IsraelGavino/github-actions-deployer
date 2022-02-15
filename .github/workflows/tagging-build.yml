@@ -42,7 +42,7 @@ jobs:
           EXPLODE_VERSION=( ${CURRENT_VERSION//./ } )
           ((EXPLODE_VERSION[2]++))
           VERSION_NOW="${EXPLODE_VERSION[0]}.${EXPLODE_VERSION[1]}.${EXPLODE_VERSION[2]}"
-          echo "::set-output name=value::VERSION_NOW"
+          echo "::set-output name=value::$VERSION_NOW"
 
       - name: 🔑 VER VERSION
         run: echo ${{steps.version-composer-now.outputs.value}}

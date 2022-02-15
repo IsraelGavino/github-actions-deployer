@@ -26,42 +26,57 @@ jobs:
           ref: ${{inputs.branch_name}}
 
       - name: 🎻 Obtener version de composer
-        id: version-composer
+        id: version-composer-current
         run: |
           VERSION=$(grep -m1 version composer.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
           cat composer.json
           echo "::set-output name=value::$VERSION"
 
-      - name: 🔑 Permisos
-        run: make permissions
+      - name: 🔑 VER VERSION
+        run: echo ${{steps.version-composer-current.outputs.value}}
 
-      - name: 🗑️ Eliminamos residuos
-        run: for f in ${{inputs.delete-list-files}}; do rm -rf $f; done
+      - name: 🔑 AUMENTAR VERSION
+        id: version-composer-now
+        run: |
+          CURRENT_VERSION=${{steps.version-composer-current.outputs.value}}
+          EXPLODE_VERSION=( ${CURRENT_VERSION//./ } )
+          ((EXPLODE_VERSION[2]++))
+          VERSION_NOW="${EXPLODE_VERSION[0]}.${EXPLODE_VERSION[1]}.${EXPLODE_VERSION[2]}"
+          echo "::set-output name=value::VERSION_NOW"
 
-      - name: 📚 Comprimimos
-        run: zip -r ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip .
+      - name: 🔑 VER VERSION
+        run: echo ${{steps.version-composer-now.outputs.value}}
 
-      - name: 🗑️ Eliminar release
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        with:
-          delete_release: true
-          tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: 🔑 Permisos
+#         run: make permissions
 
-      - name: 🚀 Crear release
-        uses: actions/create-release@v1
-        with:
-          draft: false
-          prerelease: ${{inputs.prerelease}}
-          release_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
-          tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+#       - name: 🗑️ Eliminamos residuos
+#         run: for f in ${{inputs.delete-list-files}}; do rm -rf $f; done
 
-      - name: ☁️ Subiendo release
-        uses: AButler/upload-release-assets@v2.0
-        with:
-          files: '${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip'
-          release-tag: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#       - name: 📚 Comprimimos
+#         run: zip -r ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip .
+
+#       - name: 🗑️ Eliminar release
+#         uses: dev-drprasad/delete-tag-and-release@v0.2.0
+#         with:
+#           delete_release: true
+#           tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: 🚀 Crear release
+#         uses: actions/create-release@v1
+#         with:
+#           draft: false
+#           prerelease: ${{inputs.prerelease}}
+#           release_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
+#           tag_name: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
+#         env:
+#           GITHUB_TOKEN: ${{ github.token }}
+
+#       - name: ☁️ Subiendo release
+#         uses: AButler/upload-release-assets@v2.0
+#         with:
+#           files: '${{steps.version-composer.outputs.value}}${{inputs.suffixe}}.zip'
+#           release-tag: ${{steps.version-composer.outputs.value}}${{inputs.suffixe}}
+#           repo-token: ${{ secrets.GITHUB_TOKEN }}

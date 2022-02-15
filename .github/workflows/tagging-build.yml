@@ -60,7 +60,7 @@ jobs:
           sed -i -e "s/\"version\":.*/\"version\": ${{steps.version-composer-now.outputs.value}}/g" composer.json
           git add composer.json
           git commit -m "[skip ci] Nueva version"
-          git remote add origin https://${{inputs.github_token}}@github.com/${{inputs.github_repository}}
+          git remote add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{inputs.github_repository}}
           git push
 
 #       - name: 🔑 Permisos

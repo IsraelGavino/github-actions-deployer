@@ -13,21 +13,21 @@ runs:
       with:
         ref: ${{inputs.branch_name}}
 
-      - name: 🎻 Obtener version de composer
-        id: version-composer-current
-        run: |
-          VERSION=$(grep -m1 version composer.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
-          cat composer.json
-          echo "::set-output name=value::$VERSION"
-          
-      - name: 🔑 VER VERSION
-        run: echo ${{steps.version-composer-current.outputs.value}}
+    - name: 🎻 Obtener version de composer
+      id: version-composer-current
+      run: |
+        VERSION=$(grep -m1 version composer.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+        cat composer.json
+        echo "::set-output name=value::$VERSION"
 
-      - name: 🔑 AUMENTAR VERSION
-        id: version-composer-now
-        run: |
-          CURRENT_VERSION=${{steps.version-composer-current.outputs.value}}
-          EXPLODE_VERSION=( ${CURRENT_VERSION//./ } )
-          ((EXPLODE_VERSION[2]++))
-          VERSION_NOW="${EXPLODE_VERSION[0]}.${EXPLODE_VERSION[1]}.${EXPLODE_VERSION[2]}"
-          echo "::set-output name=value::$VERSION_NOW"
+    - name: 🔑 VER VERSION
+      run: echo ${{steps.version-composer-current.outputs.value}}
+
+    - name: 🔑 AUMENTAR VERSION
+      id: version-composer-now
+      run: |
+        CURRENT_VERSION=${{steps.version-composer-current.outputs.value}}
+        EXPLODE_VERSION=( ${CURRENT_VERSION//./ } )
+        ((EXPLODE_VERSION[2]++))
+        VERSION_NOW="${EXPLODE_VERSION[0]}.${EXPLODE_VERSION[1]}.${EXPLODE_VERSION[2]}"
+        echo "::set-output name=value::$VERSION_NOW"

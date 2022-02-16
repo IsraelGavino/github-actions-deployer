@@ -17,7 +17,6 @@ runs:
       id: version-composer-current
       run: |
         VERSION=$(grep -m1 version composer.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
-        cat composer.json
         echo "::set-output name=value::$VERSION"
       shell: bash
 
@@ -33,4 +32,8 @@ runs:
         ((EXPLODE_VERSION[2]++))
         VERSION_NOW="${EXPLODE_VERSION[0]}.${EXPLODE_VERSION[1]}.${EXPLODE_VERSION[2]}"
         echo "::set-output name=value::$VERSION_NOW"
+      shell: bash
+
+    - name: 🔑 VER VERSION
+      run: echo ${{steps.version-composer-now.outputs.value}}
       shell: bash

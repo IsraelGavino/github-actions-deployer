@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Variables
-DATABASE_HOST="${1}"
-DATABASE_NAME="${2}"
-DATABASE_USER="${3}"
-DATABASE_PASSWORD="${4}"
-PATH_RELEASE="${5}"
-CLEAN_UP="${6}"
+PATH_RELEASE="${1}"
+CLEAN_UP="${2}"
+DATABASE_HOST="${3}"
+DATABASE_NAME="${4}"
+DATABASE_USER="${5}"
+DATABASE_PASSWORD="${6}"
 
 # Reset
 if [ "$CLEAN_UP" = "true" ]; then 

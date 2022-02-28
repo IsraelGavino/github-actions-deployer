@@ -72,7 +72,7 @@ echo "🗜️ Ejecutamos Unpack"
 ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "unpack" $PATH_RELEASE $DOWNLOAD_FILENAME
 
 echo "🏗️ Ejecutamos infrastructure"
-ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "infrastructure" $DATABASE_HOST $DATABASE_NAME $DATABASE_USER ${DATABASE_PASSWORD@Q} $PATH_RELEASE $CLEAN_UP
+ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "infrastructure" $PATH_RELEASE $CLEAN_UP $DATABASE_HOST $DATABASE_NAME $DATABASE_USER ${DATABASE_PASSWORD@Q}
 
 echo "🤝 Ejecutamos Shared"
 ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "shared" $PATH_PUBLIC $PATH_RELEASE "'"$DIRS_SHARE"'" "'"$FILES_SHARE"'"

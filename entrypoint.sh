@@ -25,7 +25,6 @@ DEPLOY_SUBDOMAIN="${19}"
 USERNAME="${20}"
 GITHUB_TOKEN="${21}"
 GITHUB_REPOSITORY="${22}"
-URL_IMAGES_TARGZ="${23}"
 USER=$(id -u -n)
 GROUP=$(id -g -n)
 SSH_HOST_IP=$(dig +short ${SSH_HOST})
@@ -38,10 +37,10 @@ ssh_config "$SSH_KEY" $USER $GROUP $SSH_HOST $SSH_PORT $SSH_HOST_IP
 
 # Reset
 if [ "$CLEAN_UP" = "true" ]; then 
-  echo "⏬ Ejecutamos Download"
+  echo "⏬ Ejecutamos Download database"
   DOWNLOAD_FILENAME=$(api_github_download_file $GITHUB_TOKEN $GITHUB_REPOSITORY $BRANCH_NAME ".docker/mysql/sql/database")
 
-  echo "⏫ Ejecutamos Upload"
+  echo "⏫ Ejecutamos Upload database"
   scp_upload_file $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP $DOWNLOAD_FILENAME $PATH_PUBLIC
 
   echo "🔃 Ejecutamos reset"
@@ -72,11 +71,8 @@ scp_upload_file $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP $DOWNLOAD_FILENAME $P
 echo "🗜️ Ejecutamos Unpack"
 ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "unpack" $PATH_RELEASE $DOWNLOAD_FILENAME
 
-# Reset
-if [ "$CLEAN_UP" = "true" ]; then 
-  echo "🏗️ Ejecutamos infrastructure"
-  ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "infrastructure" $DATABASE_HOST $DATABASE_NAME $DATABASE_USER ${DATABASE_PASSWORD@Q} $PATH_RELEASE $URL_IMAGES_TARGZ
-fi
+echo "🏗️ Ejecutamos infrastructure"
+ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "infrastructure" $DATABASE_HOST $DATABASE_NAME $DATABASE_USER ${DATABASE_PASSWORD@Q} $PATH_RELEASE $CLEAN_UP
 
 echo "🤝 Ejecutamos Shared"
 ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "shared" $PATH_PUBLIC $PATH_RELEASE "'"$DIRS_SHARE"'" "'"$FILES_SHARE"'"

@@ -79,10 +79,6 @@ inputs:
   GITHUB_REPOSITORY:
     description: 'Repository Github'
     required: true
-  URL_IMAGES_TARGZ:
-    description: 'Url with the images to unzip'
-    required: false
-    default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -109,7 +105,6 @@ runs:
     - ${{ inputs.USERNAME }}
     - ${{ inputs.GITHUB_TOKEN }}
     - ${{ inputs.GITHUB_REPOSITORY }}
-    - ${{ inputs.URL_IMAGES_TARGZ }}
 branding:
   icon: 'upload-cloud'
   color: 'blue'

@@ -25,4 +25,4 @@ echo "$date,$RELEASE_NAME,$USERNAME" >> .dep/releases
 
 # Creamos el directorio del nuevo release
 mkdir -p $PATH_RELEASE
-ln -s $PATH_RELEASE $PATH_DEPLOY/release
+ln -snf $PATH_RELEASE $PATH_DEPLOY/release

@@ -23,7 +23,7 @@ date=$(date +%Y-%m-%d_%H:%M:%S)
 
 # Guardamos informacion sobre el release
 echo "$LATESTS_RELEASE,$date,$RELEASE_NAME,$USERNAME" >> .dep/releases
-echo $LATESTS_RELEASE >> .dep/latest_release
+echo $LATESTS_RELEASE > .dep/latest_release
 
 # Creamos el directorio del nuevo release
 mkdir -p $PATH_RELEASE

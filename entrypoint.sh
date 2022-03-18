@@ -41,26 +41,32 @@ if [ "$CLEAN_UP" = "true" ]; then
   DOWNLOAD_FILENAME=$(api_github_download_file $GITHUB_TOKEN $GITHUB_REPOSITORY $BRANCH_NAME ".docker/mysql/sql/database")
 
   echo "⏫ Ejecutamos Upload database"
-  scp_upload_file $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP $DOWNLOAD_FILENAME $PATH_PUBLIC
+  scp_upload_file $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP $DOWNLOAD_FILENAME $PATH_PUBLIC/database
 
   echo "🔃 Ejecutamos reset"
   ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "reset" $CPANEL_URL $CPANEL_USER ${CPANEL_KEY@Q} $DATABASE_HOST $DATABASE_NAME $DATABASE_USER ${DATABASE_PASSWORD@Q} $PATH_PUBLIC $DEPLOY_DOMAIN $DEPLOY_SUBDOMAIN
 fi
 
+
 echo "🎻 Obtenemos version composer"
 VERSION=`api_github_composer_version $GITHUB_TOKEN $GITHUB_REPOSITORY $BRANCH_NAME`
 
+# Numero de release
+LATESTS_RELEASE=`ssh_execute_command_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "cat $PATH_PUBLIC/deploy/.dep/latest_release 2>/dev/null || echo 0"`
+LATESTS_RELEASE=$((LATESTS_RELEASE+1))
+
 # Directorio release
-PATH_RELEASE=$PATH_PUBLIC/deploy/releases/$VERSION
+PATH_RELEASE=$PATH_PUBLIC/deploy/releases/$LATESTS_RELEASE
+
 
 echo "⚙️ Ejecutamos Setup"
-ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "setup" $PATH_PUBLIC $PATH_RELEASE
+ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "setup" $PATH_PUBLIC
 
 echo "🔒 Ejecutamos Lock"
 ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "lock" $PATH_PUBLIC $USERNAME
 
 echo "📁 Ejecutamos Release"
-ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "release" $PATH_PUBLIC $VERSION $USERNAME
+ssh_execute_remote $SSH_HOST $SSH_PORT $SSH_USER $SSH_HOST_IP "release" $PATH_PUBLIC $VERSION $USERNAME $LATESTS_RELEASE
 
 echo "⏬ Ejecutamos Download"
 DOWNLOAD_FILENAME=$(api_github_download_release $GITHUB_TOKEN $GITHUB_REPOSITORY $BRANCH_NAME $VERSION)

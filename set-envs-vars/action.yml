@@ -8,15 +8,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-     - run: |
-        do_load=true
+    - run: |
         while IFS='= ' read key value
         do
           if [[ $key == \[*] ]]
           then
             name=$(echo $key | tr -d [])
-            [[ "${{ inputs.section-name }}" == "$name" ]] && do_load=true || do_load=false
-          elif [[ $value ]] && $do_load
+          elif [[ $value ]]
           then
             echo "$key=$value" >> $GITHUB_ENV
           fi

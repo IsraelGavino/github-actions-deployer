@@ -13,7 +13,7 @@ runs:
         do
           while IFS='= ' read key value
           do
-            value=$(echo $value|tr -d '\n')
+            value=$(echo $value | xargs)
             if [[ $key == \[*] ]]
             then
               name=$(echo $key | tr -d [])

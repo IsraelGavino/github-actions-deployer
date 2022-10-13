@@ -8,6 +8,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: |
-        cat ${{ inputs.varFilePath }} >> $GITHUB_ENV
+     - run: |
+        do_load=true
+        while IFS='= ' read key value
+        do
+          if [[ $key == \[*] ]]
+          then
+            name=$(echo $key | tr -d [])
+            [[ "${{ inputs.section-name }}" == "$name" ]] && do_load=true || do_load=false
+          elif [[ $value ]] && $do_load
+          then
+            echo "$key=$value" >> $GITHUB_ENV
+          fi
+        done < ${{ inputs.varFilePath }}
       shell: bash

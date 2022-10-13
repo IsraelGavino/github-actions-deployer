@@ -9,14 +9,17 @@ runs:
   using: "composite"
   steps:
     - run: |
-        while IFS='= ' read key value
+        for file in ${{ inputs.varFilePath }}
         do
-          if [[ $key == \[*] ]]
-          then
-            name=$(echo $key | tr -d [])
-          elif [[ $value ]]
-          then
-            echo "$key=$value" >> $GITHUB_ENV
-          fi
-        done < ${{ inputs.varFilePath }}
+          while IFS='= ' read key value
+          do
+            if [[ $key == \[*] ]]
+            then
+              name=$(echo $key | tr -d [])
+            elif [[ $value ]]
+            then
+              echo "$key=$value" >> $GITHUB_ENV
+              fi
+          done < $file
+        done
       shell: bash

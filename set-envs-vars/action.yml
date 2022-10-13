@@ -9,5 +9,5 @@ runs:
   using: "composite"
   steps:
     - run: |
-        cat ${{ inputs.varFilePath }} >> $GITHUB_ENV
+        while IFS= read -r line; do echo "$line" >> $GITHUB_ENV; done < ${{ inputs.varFilePath }} 
       shell: bash

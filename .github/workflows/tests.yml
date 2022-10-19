@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: 📋 Copiar .env.github
-        run: yes | cp -rf .env.github .env
+        run: yes | cp -rf .env.example .env
 
       - name: ⚙️ Ejecutamos settings
         run: echo ${{inputs.project-name}} |  make settings
